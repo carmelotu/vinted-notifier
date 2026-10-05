@@ -9,13 +9,15 @@ Uso:
     python vinted_notifier.py --test     # invia un messaggio di prova su Telegram
 """
 import argparse
+import html
 import json
 import os
+import re
 import random
 import sys
 import time
 from pathlib import Path
-from urllib.parse import urlparse, parse_qsl
+from urllib.parse import urlparse, parse_qsl, urlencode
 
 import requests
 
@@ -27,22 +29,6 @@ USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
 )
-
-# Nomi dei parametri nell'URL del sito -> nomi usati dalle API di Vinted
-PARAM_RENAME = {
-    "catalog": "catalog_ids",
-    "catalog_ids": "catalog_ids",
-    "brand_ids": "brand_ids",
-    "size_ids": "size_ids",
-    "status_ids": "status_ids",
-    "color_ids": "color_ids",
-    "material_ids": "material_ids",
-    "video_game_platform_ids": "video_game_platform_ids",
-    "patterns_ids": "patterns_ids",
-}
-# Parametri dell'URL del sito che non servono alle API
-PARAM_SKIP = {"time", "search_id", "page", "per_page", "order", "disabled_personalization"}
-
 
 def log(msg):
     print(time.strftime("[%Y-%m-%d %H:%M:%S] ") + msg, flush=True)
@@ -61,29 +47,25 @@ def save_json(path, data):
     tmp.replace(path)
 
 
-def search_url_to_api(search_url, per_page=40):
-    """Trasforma l'URL di una ricerca Vinted (copiato dal browser) nella chiamata API."""
+def normalize_search_url(search_url):
+    """Controlla l'URL della ricerca e forza l'ordinamento per data (più recenti prima)."""
     u = urlparse(search_url.strip())
     if not u.netloc or "vinted" not in u.netloc:
         raise ValueError(f"Non sembra un URL di Vinted: {search_url}")
+    query = [(k, v) for k, v in parse_qsl(u.query) if k not in ("order", "page", "time", "search_id")]
+    query.append(("order", "newest_first"))
     domain = f"{u.scheme or 'https'}://{u.netloc}"
-
-    grouped = {}
-    for key, value in parse_qsl(u.query, keep_blank_values=False):
-        key = key.replace("[]", "")
-        if key in PARAM_SKIP:
-            continue
-        key = PARAM_RENAME.get(key, key)
-        grouped.setdefault(key, []).append(value)
-
-    params = {k: ",".join(v) for k, v in grouped.items()}
-    params["order"] = "newest_first"
-    params["per_page"] = str(per_page)
-    params["page"] = "1"
-    return domain, params
+    return domain, f"{domain}{u.path or '/catalog'}?{urlencode(query, safe='[]')}"
 
 
 class VintedClient:
+    """Legge la pagina dei risultati di ricerca del sito, come farebbe un browser.
+
+    Da settembre 2026 le API di Vinted restituiscono gli articoli del mercato del
+    paese da cui arriva la richiesta (per GitHub: Stati Uniti), mentre la pagina
+    del sito rispetta dominio e filtri.
+    """
+
     def __init__(self):
         self.sessions = {}
 
@@ -92,49 +74,69 @@ class VintedClient:
             s = requests.Session()
             s.headers.update({
                 "User-Agent": USER_AGENT,
-                "Accept": "application/json, text/plain, */*",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
                 "Accept-Language": "it-IT,it;q=0.9,en;q=0.8",
             })
-            # La homepage imposta i cookie di sessione necessari alle API
             s.get(domain + "/", timeout=20)
             self.sessions[domain] = s
         return self.sessions[domain]
 
     def search(self, search_url):
-        domain, params = search_url_to_api(search_url)
+        domain, url = normalize_search_url(search_url)
         for attempt in range(2):
-            s = self._session(domain, refresh=attempt > 0)
-            r = s.get(domain + "/api/v2/catalog/items", params=params, timeout=20,
-                      headers={"Referer": search_url})
+            r = self._session(domain, refresh=attempt > 0).get(url, timeout=30)
             if r.status_code in (401, 403) and attempt == 0:
                 continue  # cookie scaduti: rinnova la sessione e riprova
             if r.status_code == 429:
                 raise RuntimeError("Vinted sta limitando le richieste (429): aumenta l'intervallo")
             r.raise_for_status()
-            return domain, r.json().get("items", [])
-        raise RuntimeError(f"Accesso negato dalle API di Vinted (HTTP {r.status_code})")
+            items = parse_catalog_html(r.text, domain)
+            if not items and "feed-grid" not in r.text:
+                raise RuntimeError("Pagina di Vinted senza articoli leggibili: forse è cambiato il sito")
+            return domain, items
+        raise RuntimeError(f"Accesso negato da Vinted (HTTP {r.status_code})")
 
 
-def item_fields(item, domain):
-    price = item.get("price")
-    if isinstance(price, dict):
-        price = f"{price.get('amount')} {price.get('currency_code', '')}".strip()
-    total = item.get("total_item_price")
-    if isinstance(total, dict):
-        total = f"{total.get('amount')} {total.get('currency_code', '')}".strip()
-    photo = item.get("photo") or {}
-    url = item.get("url") or f"{domain}/items/{item.get('id')}"
+ITEM_LINK_RE = re.compile(
+    r'<a href="(/items/(\d+)[^"?]*)[^"]*"[^>]*data-testid="product-item-id-\d+--overlay-link"[^>]*title="([^"]*)"')
+ITEM_IMG_RE = re.compile(r'<img src="([^"]+)"[^>]*data-testid="product-item-id-(\d+)--image--img"')
+PRICE_RE = re.compile(r"^\d[\d.,]*\s?€$")
+FIELD_KEYS = ("Brand", "Marca", "Condizioni", "Taglia")
+
+
+def parse_item_title(text):
+    """'Titolo, Brand: X, Condizioni: Y, Taglia: L, 15.00 €, 16.45 €' -> campi."""
+    parts = [p.strip() for p in html.unescape(text).split(", ")]
+    prices = []
+    while parts and PRICE_RE.match(parts[-1]):
+        prices.insert(0, parts.pop())
+    fields, title_parts = {}, []
+    for p in parts:
+        key, sep, value = p.partition(": ")
+        if sep and key in FIELD_KEYS and value:
+            fields[key] = value
+        elif not fields:
+            title_parts.append(p)
     return {
-        "id": str(item.get("id")),
-        "title": item.get("title", "(senza titolo)"),
-        "price": price or "?",
-        "total": total,
-        "brand": item.get("brand_title") or "",
-        "size": item.get("size_title") or "",
-        "status": item.get("status") or "",
-        "photo": photo.get("url") or photo.get("full_size_url"),
-        "url": url,
+        "title": ", ".join(title_parts) or "(senza titolo)",
+        "price": prices[0] if prices else "?",
+        "total": prices[1] if len(prices) > 1 else None,
+        "brand": fields.get("Brand") or fields.get("Marca") or "",
+        "size": fields.get("Taglia", ""),
+        "status": fields.get("Condizioni", ""),
     }
+
+
+def parse_catalog_html(page, domain):
+    photos = {item_id: html.unescape(src) for src, item_id in ITEM_IMG_RE.findall(page)}
+    items, seen_ids = [], set()
+    for href, item_id, title in ITEM_LINK_RE.findall(page):
+        if item_id in seen_ids:
+            continue
+        seen_ids.add(item_id)
+        items.append({"id": item_id, "url": domain + html.unescape(href), "photo": photos.get(item_id),
+                      **parse_item_title(title)})
+    return items
 
 
 def html_escape(text):
@@ -190,16 +192,21 @@ def check_all(config, client, telegram, seen):
 
         known = set(seen.get(search["url"], []))
         first_run = search["url"] not in seen
-        new_items = [i for i in items if str(i.get("id")) not in known]
+        new_items = [i for i in items if str(i["id"]) not in known]
         failed = set()
 
         if first_run:
             # Al primo giro registra gli articoli già presenti senza notificarli
             log(f"'{name}': primo controllo, {len(items)} articoli memorizzati (nessuna notifica)")
+            try:
+                telegram.send_text(f"✅ Ricerca <b>{html_escape(name)}</b> attiva: {len(items)} articoli "
+                                   "già presenti. Da ora ti avviso solo dei nuovi.")
+            except requests.RequestException as e:
+                log(f"Errore Telegram: {e}")
         else:
             # Dal più vecchio al più recente, così su Telegram restano in ordine
             for item in reversed(new_items):
-                f = item_fields(item, domain)
+                f = item
                 try:
                     telegram.send_item(name, f)
                     log(f"'{name}': notificato {f['title']} ({f['price']})")
@@ -211,7 +218,7 @@ def check_all(config, client, telegram, seen):
             if not new_items:
                 log(f"'{name}': nessun articolo nuovo")
 
-        known.update(str(i.get("id")) for i in items if str(i.get("id")) not in failed)
+        known.update(str(i["id"]) for i in items if str(i["id"]) not in failed)
         # Tiene solo gli ultimi 1000 id per ricerca
         seen[search["url"]] = list(known)[-1000:]
         save_json(SEEN_FILE, seen)
