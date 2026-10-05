@@ -2,5 +2,10 @@
   "telegram": {
     "chat_id": "105275480"
   },
-  "searches": []
+  "searches": [
+    {
+      "name": "Cargo uomo",
+      "url": "https://www.vinted.it/catalog?search_text=cargo%20uomo&catalog[]=34&currency=EUR&size_ids[]=209&size_ids[]=210&brand_ids[]=1153&brand_ids[]=259&brand_ids[]=362&brand_ids[]=872289&brand_ids[]=65&status_ids[]=2&status_ids[]=6&status_ids[]=1&status_ids[]=3&price_from=0&price_to=15"
+    }
+  ]
 }

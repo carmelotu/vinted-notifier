@@ -1,0 +1,40 @@
+name: Vinted Notifier
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"   # ogni 30 minuti (GitHub può ritardare di qualche minuto)
+  workflow_dispatch:          # permette di avviarlo a mano
+
+concurrency:
+  group: vinted
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Recupera gli articoli già visti
+        uses: actions/cache/restore@v4
+        with:
+          path: seen_items.json
+          key: seen-${{ github.run_id }}
+          restore-keys: seen-
+
+      - name: Installa requests
+        run: pip install --quiet requests
+
+      - name: Controlla Vinted
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python vinted_notifier.py --once
+
+      - name: Salva gli articoli già visti
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: seen_items.json
+          key: seen-${{ github.run_id }}
