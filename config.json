@@ -2,5 +2,10 @@
   "telegram": {
     "chat_id": "105275480"
   },
-  "searches": []
+  "searches": [
+    {
+      "name": "PILE",
+      "url": "https://www.vinted.it/catalog?currency=EUR&search_text=pile%20uomo&size_ids[]=210&brand_ids[]=2319&brand_ids[]=90804&price_to=35"
+    }
+  ]
 }
