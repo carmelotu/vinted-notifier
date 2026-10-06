@@ -14,6 +14,10 @@
     {
       "name": "PANTALONE",
       "url": "https://www.vinted.it/catalog?currency=EUR&search_text=pantalone%20uomo&brand_ids[]=362&brand_ids[]=896209&brand_ids[]=1153&brand_ids[]=6082417&price_to=20&size_ids[]=209&size_ids[]=210"
+    },
+    {
+      "name": "UOMO",
+      "url": "https://www.vinted.it/catalog?size_ids[]=209&size_ids[]=210&brand_ids[]=214&brand_ids[]=118270&brand_ids[]=6539&brand_ids[]=4690624&brand_ids[]=2319&brand_ids[]=90804&brand_ids[]=2069&brand_ids[]=896209&brand_ids[]=173188&brand_ids[]=362&brand_ids[]=872289&brand_ids[]=1912379&brand_ids[]=251&brand_ids[]=17161&brand_ids[]=15457&brand_ids[]=567&brand_ids[]=7369981&brand_ids[]=6408486&brand_ids[]=6483274&brand_ids[]=9854383&brand_ids[]=139960&brand_ids[]=222038&brand_ids[]=772922&brand_ids[]=168278&brand_ids[]=334274&brand_ids[]=73952&brand_ids[]=6882930&brand_ids[]=73306&brand_ids[]=174480&brand_ids[]=203598&price_to=25&currency=EUR"
     }
   ]
 }
