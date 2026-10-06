@@ -249,7 +249,8 @@ def main():
         return
 
     if not config.get("searches"):
-        sys.exit("Aggiungi almeno una ricerca in 'searches' dentro config.json.")
+        log("Nessuna ricerca in config.json: niente da controllare.")
+        return
 
     client = VintedClient()
     seen = load_json(SEEN_FILE, {})
