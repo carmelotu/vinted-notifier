@@ -5,7 +5,7 @@
   "searches": [
     {
       "name": "Cargo uomo",
-      "url": "https://www.vinted.it/catalog?search_text=cargo%20uomo&catalog[]=34&currency=EUR&size_ids[]=209&size_ids[]=210&brand_ids[]=1153&brand_ids[]=259&brand_ids[]=362&brand_ids[]=872289&brand_ids[]=65&status_ids[]=2&status_ids[]=6&status_ids[]=1&status_ids[]=3&price_from=0&price_to=15"
+      "url": "https://www.vinted.it/catalog?search_text=cargo%20uomo&catalog[]=34&currency=EUR&size_ids[]=209&size_ids[]=210&brand_ids[]=1153&brand_ids[]=259&brand_ids[]=362&brand_ids[]=872289&brand_ids[]=65&status_ids[]=2&status_ids[]=6&status_ids[]=1&status_ids[]=3&price_from=0&price_to=10"
     },
     {
       "name": "Generale uomo",
@@ -13,19 +13,19 @@
     },
     {
       "name": "Maglioni",
-      "url": "https://www.vinted.it/catalog?catalog[]=1815&currency=EUR&size_ids[]=209&size_ids[]=210&brand_ids[]=259&brand_ids[]=362&brand_ids[]=872289&brand_ids[]=65&brand_ids[]=1153&brand_ids[]=88&brand_ids[]=4273&brand_ids[]=442625&brand_ids[]=44&brand_ids[]=4864798&brand_ids[]=2319&brand_ids[]=90804&brand_ids[]=17161&status_ids[]=2&status_ids[]=6&status_ids[]=1&status_ids[]=3&price_from=0&price_to=20"
+      "url": "https://www.vinted.it/catalog?catalog[]=1815&currency=EUR&size_ids[]=209&size_ids[]=210&brand_ids[]=259&brand_ids[]=362&brand_ids[]=872289&brand_ids[]=65&brand_ids[]=1153&brand_ids[]=88&brand_ids[]=4273&brand_ids[]=442625&brand_ids[]=44&brand_ids[]=4864798&brand_ids[]=2319&brand_ids[]=90804&brand_ids[]=17161&status_ids[]=2&status_ids[]=6&status_ids[]=1&status_ids[]=3&price_from=0&price_to=10"
     },
     {
       "name": "Camicie",
-      "url": "https://www.vinted.it/catalog?catalog[]=536&currency=EUR&size_ids[]=209&size_ids[]=210&brand_ids[]=259&brand_ids[]=362&brand_ids[]=872289&brand_ids[]=65&brand_ids[]=1153&brand_ids[]=88&brand_ids[]=4273&brand_ids[]=442625&brand_ids[]=44&brand_ids[]=4864798&brand_ids[]=2319&brand_ids[]=90804&brand_ids[]=17161&status_ids[]=2&status_ids[]=6&status_ids[]=1&status_ids[]=3&price_from=0&price_to=20"
+      "url": "https://www.vinted.it/catalog?catalog[]=536&currency=EUR&size_ids[]=209&size_ids[]=210&brand_ids[]=259&brand_ids[]=362&brand_ids[]=872289&brand_ids[]=65&brand_ids[]=1153&brand_ids[]=88&brand_ids[]=4273&brand_ids[]=442625&brand_ids[]=44&brand_ids[]=4864798&brand_ids[]=2319&brand_ids[]=90804&brand_ids[]=17161&status_ids[]=2&status_ids[]=6&status_ids[]=1&status_ids[]=3&price_from=0&price_to=10"
     },
     {
       "name": "Gilet",
-      "url": "https://www.vinted.it/catalog?catalog[]=2553&currency=EUR&size_ids[]=209&size_ids[]=210&brand_ids[]=259&brand_ids[]=362&brand_ids[]=872289&brand_ids[]=65&brand_ids[]=1153&brand_ids[]=88&brand_ids[]=4273&brand_ids[]=442625&brand_ids[]=44&brand_ids[]=4864798&brand_ids[]=2319&brand_ids[]=90804&brand_ids[]=17161&status_ids[]=2&status_ids[]=6&status_ids[]=1&status_ids[]=3&price_from=0&price_to=20"
+      "url": "https://www.vinted.it/catalog?catalog[]=2553&currency=EUR&size_ids[]=209&size_ids[]=210&brand_ids[]=259&brand_ids[]=362&brand_ids[]=872289&brand_ids[]=65&brand_ids[]=1153&brand_ids[]=88&brand_ids[]=4273&brand_ids[]=442625&brand_ids[]=44&brand_ids[]=4864798&brand_ids[]=2319&brand_ids[]=90804&brand_ids[]=17161&status_ids[]=2&status_ids[]=6&status_ids[]=1&status_ids[]=3&price_from=0&price_to=10"
     },
     {
       "name": "Polo manica lunga",
-      "url": "https://www.vinted.it/catalog?search_text=Polo%20manica%20lunga%20uomo&catalog[]=5&currency=EUR&size_ids[]=209&size_ids[]=210&brand_ids[]=259&brand_ids[]=362&brand_ids[]=872289&brand_ids[]=65&brand_ids[]=1153&brand_ids[]=88&brand_ids[]=4273&brand_ids[]=442625&brand_ids[]=44&brand_ids[]=4864798&brand_ids[]=2319&brand_ids[]=90804&brand_ids[]=17161&status_ids[]=2&status_ids[]=6&status_ids[]=1&status_ids[]=3&price_from=0&price_to=20"
+      "url": "https://www.vinted.it/catalog?search_text=Polo%20manica%20lunga%20uomo&catalog[]=5&currency=EUR&size_ids[]=209&size_ids[]=210&brand_ids[]=259&brand_ids[]=362&brand_ids[]=872289&brand_ids[]=65&brand_ids[]=1153&brand_ids[]=88&brand_ids[]=4273&brand_ids[]=442625&brand_ids[]=44&brand_ids[]=4864798&brand_ids[]=2319&brand_ids[]=90804&brand_ids[]=17161&status_ids[]=2&status_ids[]=6&status_ids[]=1&status_ids[]=3&price_from=0&price_to=10"
     }
   ]
 }
