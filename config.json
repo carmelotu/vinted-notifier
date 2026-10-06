@@ -6,6 +6,14 @@
     {
       "name": "PILE",
       "url": "https://www.vinted.it/catalog?currency=EUR&search_text=pile%20uomo&size_ids[]=210&brand_ids[]=2319&brand_ids[]=90804&price_to=35"
+    },
+    {
+      "name": "CAMICIA",
+      "url": "https://www.vinted.it/catalog?currency=EUR&search_text=camicia&brand_ids[]=88&size_ids[]=209&size_ids[]=210&price_to=20"
+    },
+    {
+      "name": "PANTALONE",
+      "url": "https://www.vinted.it/catalog?currency=EUR&search_text=pantalone%20uomo&brand_ids[]=362&brand_ids[]=896209&brand_ids[]=1153&brand_ids[]=6082417&price_to=20&size_ids[]=209&size_ids[]=210"
     }
   ]
 }
