@@ -183,6 +183,8 @@ def check_all(config, client, telegram, seen):
     errors = 0
     for search in config["searches"]:
         name = search.get("name") or search["url"]
+        if search.get("paused"):
+            continue
         try:
             domain, items = client.search(search["url"])
         except Exception as e:
@@ -248,7 +250,7 @@ def main():
         log("Messaggio di prova inviato.")
         return
 
-    if not config.get("searches"):
+    if not any(not x.get("paused") for x in config.get("searches", [])):
         log("Nessuna ricerca in config.json: niente da controllare.")
         return
 
@@ -260,7 +262,8 @@ def main():
         errors = check_all(config, client, telegram, seen)
         if args.once:
             # Se nessuna ricerca è andata a buon fine, esce con errore (GitHub ti avvisa)
-            if errors == len(config["searches"]):
+            active = [x for x in config["searches"] if not x.get("paused")]
+            if active and errors == len(active):
                 sys.exit(1)
             break
         time.sleep(interval + random.uniform(0, 10))

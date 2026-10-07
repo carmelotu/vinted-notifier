@@ -9,11 +9,13 @@
     },
     {
       "name": "CAMICIA",
-      "url": "https://www.vinted.it/catalog?currency=EUR&search_text=camicia&brand_ids[]=88&size_ids[]=209&size_ids[]=210&price_to=20"
+      "url": "https://www.vinted.it/catalog?currency=EUR&search_text=camicia&brand_ids[]=88&size_ids[]=209&size_ids[]=210&price_to=20",
+      "paused": true
     },
     {
       "name": "PANTALONE",
-      "url": "https://www.vinted.it/catalog?currency=EUR&search_text=pantalone%20uomo&brand_ids[]=362&brand_ids[]=896209&brand_ids[]=1153&brand_ids[]=6082417&price_to=20&size_ids[]=209&size_ids[]=210"
+      "url": "https://www.vinted.it/catalog?currency=EUR&search_text=pantalone%20uomo&brand_ids[]=362&brand_ids[]=896209&brand_ids[]=1153&brand_ids[]=6082417&price_to=20&size_ids[]=209&size_ids[]=210",
+      "paused": true
     },
     {
       "name": "UOMO",
