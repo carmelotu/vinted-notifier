@@ -143,6 +143,21 @@ def html_escape(text):
     return str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
+def download_photo(url):
+    """Scarica la foto di Vinted (in .webp) e la converte in JPEG.
+
+    Telegram non accetta il link .webp di Vinted in sendPhoto, quindi la foto
+    viene scaricata qui e caricata direttamente.
+    """
+    r = requests.get(url, timeout=20, headers={"User-Agent": USER_AGENT})
+    r.raise_for_status()
+    from io import BytesIO
+    from PIL import Image
+    out = BytesIO()
+    Image.open(BytesIO(r.content)).convert("RGB").save(out, "JPEG", quality=90)
+    return out.getvalue()
+
+
 class Telegram:
     def __init__(self, token, chat_id):
         self.api = f"https://api.telegram.org/bot{token}"
@@ -154,6 +169,13 @@ class Telegram:
             "disable_web_page_preview": "false",
         })
         r.raise_for_status()
+
+    def send_photo(self, data, caption):
+        r = requests.post(self.api + "/sendPhoto", timeout=30,
+                          data={"chat_id": self.chat_id, "caption": caption, "parse_mode": "HTML"},
+                          files={"photo": ("foto.jpg", data, "image/jpeg")})
+        if not r.ok:
+            raise RuntimeError(f"Telegram HTTP {r.status_code}: {r.text[:200]}")
 
     def send_item(self, search_name, f):
         lines = [f"🆕 <b>{html_escape(search_name)}</b>", f"<b>{html_escape(f['title'])}</b>"]
@@ -168,14 +190,10 @@ class Telegram:
         caption = "\n".join(lines)
         if f["photo"]:
             try:
-                r = requests.post(self.api + "/sendPhoto", timeout=20, data={
-                    "chat_id": self.chat_id, "photo": f["photo"],
-                    "caption": caption, "parse_mode": "HTML",
-                })
-                r.raise_for_status()
+                self.send_photo(download_photo(f["photo"]), caption)
                 return
-            except requests.RequestException:
-                pass  # se la foto non va, manda solo il testo
+            except Exception as e:
+                log(f"Foto non inviata ({e}), mando solo il testo")
         self.send_text(caption)
 
 

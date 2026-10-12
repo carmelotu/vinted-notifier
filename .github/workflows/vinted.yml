@@ -23,8 +23,8 @@ jobs:
           key: seen-${{ github.run_id }}
           restore-keys: seen-
 
-      - name: Installa requests
-        run: pip install --quiet requests
+      - name: Installa requests e pillow
+        run: pip install --quiet requests pillow
 
       - name: Controlla Vinted
         env:
