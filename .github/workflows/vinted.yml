@@ -2,7 +2,7 @@ name: Vinted Notifier
 
 on:
   schedule:
-    - cron: "*/30 * * * *"   # ogni 30 minuti (GitHub può ritardare di qualche minuto)
+    - cron: "*/5 * * * *"    # ogni 5 minuti (GitHub può ritardare di qualche minuto)
   workflow_dispatch:          # permette di avviarlo a mano
 
 concurrency:
