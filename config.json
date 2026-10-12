@@ -25,6 +25,16 @@
     {
       "name": "Pantalone sartoriale",
       "url": "https://www.vinted.it/catalog?currency=EUR&catalog[]=261&size_ids[]=209&size_ids[]=210&price_to=20"
+    },
+    {
+      "name": "Pantalone loose",
+      "url": "https://www.vinted.it/catalog?currency=EUR&search_text=loose%20pants&size_ids[]=209&size_ids[]=210&price_to=20&brand_ids[]=65&brand_ids[]=362&brand_ids[]=88&brand_ids[]=10&brand_ids[]=44&brand_ids[]=259&brand_ids[]=872289&brand_ids[]=63",
+      "paused": true
+    },
+    {
+      "name": "Loose jeans",
+      "url": "https://www.vinted.it/catalog?currency=EUR&search_text=loose%20jeans&size_ids[]=209&size_ids[]=210&price_to=20&brand_ids[]=65&brand_ids[]=362&brand_ids[]=88&brand_ids[]=10&brand_ids[]=44&brand_ids[]=259&brand_ids[]=872289&brand_ids[]=63",
+      "paused": true
     }
   ]
 }
