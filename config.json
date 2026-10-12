@@ -40,6 +40,10 @@
     {
       "name": "Nike vintage",
       "url": "https://www.vinted.it/catalog?currency=EUR&catalog[]=267&size_ids[]=209&size_ids[]=210&search_text=nike%20vintage&price_to=25"
+    },
+    {
+      "name": "Adidas vintage",
+      "url": "https://www.vinted.it/catalog?currency=EUR&catalog[]=267&size_ids[]=209&size_ids[]=210&search_text=Adidas%20vintage&price_to=25"
     }
   ]
 }
