@@ -32,6 +32,10 @@
       "name": "Loose jeans",
       "url": "https://www.vinted.it/catalog?currency=EUR&search_text=loose%20jeans&size_ids[]=209&size_ids[]=210&price_to=20&brand_ids[]=65&brand_ids[]=362&brand_ids[]=88&brand_ids[]=10&brand_ids[]=44&brand_ids[]=259&brand_ids[]=872289&brand_ids[]=63",
       "paused": true
+    },
+    {
+      "name": "Maglione lana",
+      "url": "https://www.vinted.it/catalog?search_text=maglione%20uomo&size_ids[]=209&size_ids[]=210&material_ids[]=122&material_ids[]=123&material_ids[]=46&material_ids[]=121&material_ids[]=152&price_to=25&currency=EUR&brand_ids[]=4690624&brand_ids[]=88&brand_ids[]=1153&brand_ids[]=362&brand_ids[]=872289&brand_ids[]=441&brand_ids[]=6516526&brand_ids[]=179674&brand_ids[]=6478418&brand_ids[]=139960&brand_ids[]=2069&brand_ids[]=4463"
     }
   ]
 }
