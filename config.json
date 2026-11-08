@@ -47,6 +47,14 @@
       "name": "Adidas vintage",
       "url": "https://www.vinted.it/catalog?currency=EUR&catalog[]=267&size_ids[]=209&size_ids[]=210&search_text=Adidas%20vintage&price_to=25",
       "paused": true
+    },
+    {
+      "name": "Medea",
+      "url": "https://www.vinted.it/catalog?search_text=borsa%20medea&brand_ids[]=466021&price_to=100&currency=EUR"
+    },
+    {
+      "name": "Margiela",
+      "url": "https://www.vinted.it/catalog?search_text=borsa&brand_ids[]=450765&brand_ids[]=639289&price_to=100&currency=EUR"
     }
   ]
 }
